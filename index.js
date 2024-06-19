@@ -1,7 +1,9 @@
 const path = require('path');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
-const {v4: uuidv4} = require('uuid')
+const { nanoid } = require('nanoid')
+
+
 const {codeToHtml} = require('shiki')
 var codeBlocks = require('gfm-code-blocks');
 
@@ -64,7 +66,7 @@ module.exports = {
                 if (res[2]) {
                     key = res[2]
                 }else{
-                    key = uuidv4()
+                    key = nanoid()
                 }
                 
                 let resCode = code
