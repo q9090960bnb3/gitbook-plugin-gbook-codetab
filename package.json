@@ -1,0 +1,32 @@
+{
+  "name": "gitbook-plugin-gbook-codetab",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "gitbook": "*"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/q9090960bnb3/gitbook-plugin-gbook-codetab.git"
+  },
+  "keywords": [
+    "codetab",
+    "gbook"
+  ],
+  "author": "q9090960bnb3",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/q9090960bnb3/gitbook-plugin-gbook-codetab/issues"
+  },
+  "homepage": "https://github.com/q9090960bnb3/gitbook-plugin-gbook-codetab#readme",
+  "dependencies": {
+    "gfm-code-blocks": "1.0.0",
+    "mkdirp": "^0.5.1",
+    "shiki": "^1.7.0",
+    "uuid": "^10.0.0"
+  }
+}
