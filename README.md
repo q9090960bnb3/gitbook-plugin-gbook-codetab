@@ -35,7 +35,7 @@ print('xxxxx')
 @import "testcode/1.py" {lang: 'go', title: 'not go is python'}
 
 {% endcodetab %}
-```
+``````
 
 说明：
 
@@ -50,4 +50,4 @@ print('xxxxx')
 {
   "plugins": ["gbook-codetab"]
 }
-``````
+```
