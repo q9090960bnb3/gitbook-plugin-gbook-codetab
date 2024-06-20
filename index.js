@@ -105,7 +105,7 @@ module.exports = {
                     code
                 })
             })
-            console.log('mBlock:', mBlock)
+            // console.log('mBlock:', mBlock)
             let result = '<div class="codetabs">';
             let tabsHeader = '';
             let tabsContent = '';
