@@ -87,9 +87,9 @@ module.exports = {
                     if (info.lang) {
                         lang = info.lang
                     }
-                    if (title === ''){
-                        title = lang
-                    }
+                }
+                if (title === ''){
+                    title = lang
                 }
                 
                 if (mBlock.has(key)){
