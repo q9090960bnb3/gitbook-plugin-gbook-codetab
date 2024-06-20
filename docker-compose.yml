@@ -1,0 +1,4 @@
+version: '3'
+services:
+  gbook-plugins:
+    image: q9090960bnb3/gbook

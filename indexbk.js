@@ -1,8 +1,11 @@
 const path = require('path');
 const mkdirp = require('mkdirp');
-const codeBlocks = require('gfm-code-blocks');
 const fs = require('fs');
-const hljs = require('highlight.js');
+const { nanoid } = require('nanoid')
+
+
+const {codeToHtml} = require('shiki')
+var codeBlocks = require('gfm-code-blocks');
 
 function getAssets() {
     return {
@@ -54,7 +57,6 @@ module.exports = {
 
             const mBlock = new Map()
 
-            let index =  Date.now() * 1000;
             codeBlocks(content.body).map(({
                 lang,
                 code
@@ -64,12 +66,12 @@ module.exports = {
                 if (res[2]) {
                     key = res[2]
                 }else{
-                    key = index++
+                    key = nanoid()
                 }
                 
-                let resCode = code.trim()
+                let resCode = code
                 if (mBlock.has(key)){
-                    let srcCode = mBlock.get(key).code;
+                    let srcCode = mBlock.get(key);
                     resCode = srcCode + "\n" + code
                 }
                 mBlock.set(key, {
@@ -77,14 +79,17 @@ module.exports = {
                     code: resCode
                 })
             })
-            console.log('mBlock:', mBlock)
+
             let result = '<div class="codetabs">';
             let tabsHeader = '';
             let tabsContent = '';
             let i = 0
-            mBlock.forEach(({lang, code}) => {
+            mBlock.forEach(async ({lang, code}) => {
                 tabsHeader += createTabHeader(lang, i, i == 0);
-                const data = hljs.highlight(code,{language: lang}).value
+                const data = await codeToHtml(code, {
+                    lang: lang,
+                    theme: 'vitesse-dark'
+                })
                 tabsContent += createTabBody(i,lang, data);
                 i++
             })
@@ -92,7 +97,6 @@ module.exports = {
             result += '<div class="codetabs-header">' + tabsHeader + '</div>';
             result += '<div class="codetabs-body">' + tabsContent + '</div>';
             result += '</div>';
-            console.log('result:', result)
             return result;
         }
     }

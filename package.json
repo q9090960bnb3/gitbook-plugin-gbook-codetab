@@ -25,6 +25,7 @@
   "homepage": "https://github.com/q9090960bnb3/gitbook-plugin-gbook-codetab#readme",
   "dependencies": {
     "gfm-code-blocks": "1.0.0",
+    "highlight.js": "^11.9.0",
     "mkdirp": "^0.5.1",
     "nanoid": "^5.0.7",
     "shiki": "^1.7.0"
