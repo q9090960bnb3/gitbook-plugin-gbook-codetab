@@ -37,6 +37,12 @@ function createTabBody(i, language, data) {
         '</code></pre></div>';
 }
 
+function getTitleInfo(str) {
+    let validStr = str.replace(/([a-zA-Z_$][0-9a-zA-Z_$]*)\s*:/g, '"$1": ');
+    validStr = validStr.replace(/'/g, '"');
+    return JSON.parse(validStr)
+}
+
 module.exports = {
     book: getAssets,
     hooks: {
@@ -48,9 +54,9 @@ module.exports = {
     },
     blocks: {
         codetab: function(content) {
-            console.log('mycodetab:', content)
+            // console.log('mycodetab:', content)
 
-            const reg = /([a-zA-Z]+)[ \t]*(?:{([a-zA-Z0-9]+)})?/
+            const reg = /([a-zA-Z]+)[ \t]*(?:({[a-zA-Z0-9,:"' ]+}))?/
 
             const mBlock = new Map()
 
@@ -60,30 +66,43 @@ module.exports = {
                 code
             }) => {
                 const res = lang.match(reg)
-                var key = ''
+                lang = res[1].trim() 
+                code = code.trim()
+                let title = lang
+                let key = index++
                 if (res[2]) {
-                    key = res[2]
-                }else{
-                    key = index++
+                    const info = getTitleInfo(res[2])
+                    if (info.group){
+                        key = info.group
+                    }
+                    if (info.title) {
+                        title = info.title
+                    }
+                    if (info.lang) {
+                        lang = info.lang
+                    }
                 }
-                
-                let resCode = code.trim()
+
                 if (mBlock.has(key)){
-                    let srcCode = mBlock.get(key).code;
-                    resCode = srcCode + "\n" + code
+                    const srcBlock = mBlock.get(key)
+                    let srcCode = srcBlock.code;
+                    code = srcCode + "\n\n" + code
+                    lang = srcBlock.lang
+                    title = srcBlock.title
                 }
                 mBlock.set(key, {
-                    lang: res[1],
-                    code: resCode
+                    lang,
+                    title,
+                    code
                 })
             })
-            console.log('mBlock:', mBlock)
+            // console.log('mBlock:', mBlock)
             let result = '<div class="codetabs">';
             let tabsHeader = '';
             let tabsContent = '';
             let i = 0
-            mBlock.forEach(({lang, code}) => {
-                tabsHeader += createTabHeader(lang, i, i == 0);
+            mBlock.forEach(({lang, code, title}) => {
+                tabsHeader += createTabHeader(title, i, i == 0);
                 const data = hljs.highlight(code,{language: lang}).value
                 tabsContent += createTabBody(i,lang, data);
                 i++
@@ -92,7 +111,7 @@ module.exports = {
             result += '<div class="codetabs-header">' + tabsHeader + '</div>';
             result += '<div class="codetabs-body">' + tabsContent + '</div>';
             result += '</div>';
-            console.log('result:', result)
+            // console.log('result:', result)
             return result;
         }
     }
