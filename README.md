@@ -7,7 +7,7 @@ thanks for [gitbook-plugin-prism-codetab-fox](https://www.npmjs.com/package/gitb
 ``````md
 {% codetab %}
 
-```js {group: "g1", title: "helloworld"}
+```js [group: "g1", title: "helloworld"]
 console.log('hi')
 console.log('hi-----')
 
@@ -17,7 +17,7 @@ console.log("good job")
 console.log(1+2)
 ```
 
-```js {group: "g1"}
+```js [group: "g1"]
 console.log('+++++')
 ```
 
@@ -25,16 +25,16 @@ console.log('+++++')
 fmt.Println("hi go")
 ```
 
-```py {title: 'job py'}
+```py [title: 'job py']
 print('xxxxx')
 ```
 
-@import "testcode/11.ts" {group: 'g2'}
-@import "testcode/1.ts" {group: 'g2'}
+@import "testcode/11.ts" [group: 'g2']
+@import "testcode/1.ts" [group: 'g2']
 
-@import "testcode/1.py" {lang: 'go', title: 'not go is python'}
+@import "testcode/1.py" [lang: 'go', title: 'not go is python']
 
-@import "testcode/1.html" {dbe: true}
+@import "testcode/1.html" [dbe: true]
 
 {% endcodetab %}
 ``````
