@@ -11,6 +11,12 @@ function getAssets() {
     };
 }
 
+function DecodeDBE(content) {
+    content = content.replace(/\\\{\\\{/, "\{\{")
+    content = content.replace(/\\\}\\\}/, "\}\}")
+    return content
+}
+
 function syncFile(book, outputDirectory, outputFile, inputFile) {
     outputDirectory = path.join(book.output.root(), '/gitbook/gitbook-plugin-gbook-codetab/' + outputDirectory);
     outputFile = path.resolve(outputDirectory, outputFile);
@@ -59,14 +65,18 @@ module.exports = {
     },
     blocks: {
         codetab: function(content) {
-            // console.log('mycodetab:', content)
+            // console.log('content:', content)
+            body = content.body
+            // body = body.replace(/\\\{\\\{/, "\{\{")
+            // body = body.replace(/\\\}\\\}/, "\}\}")
+            // console.log('mycodetab:', body)
 
-            const reg = /([a-zA-Z]+)[ \t]*(?:{([a-zA-Z0-9,:"' ]+)})?/
+            const reg = /([a-zA-Z]+)[ \t]*(?:{([_a-zA-Z0-9,:"' \u4e00-\u9fff]+)})?/
 
             const mBlock = new Map()
 
             let index =  Date.now() * 1000;
-            codeBlocks(content.body).map(({
+            codeBlocks(body).map(({
                 lang,
                 code
             }) => {
@@ -76,8 +86,10 @@ module.exports = {
                 code = code.trim()
                 let title = ''
                 let key = index++
+                let dbe = false
                 if (res[2]) {
                     const info = getTitleInfo(res[2])
+                    // console.log('info:', info)
                     if (info.group){
                         key = info.group
                     }
@@ -87,6 +99,10 @@ module.exports = {
                     if (info.lang) {
                         lang = info.lang
                     }
+                    if (info.dbe) {
+                        dbe = info.dbe
+                        code = DecodeDBE(code)
+                    }
                 }
                 if (title === ''){
                     title = lang
@@ -95,6 +111,10 @@ module.exports = {
                 if (mBlock.has(key)){
                     const srcBlock = mBlock.get(key)
                     let srcCode = srcBlock.code;
+                    dbe = srcBlock.dbe
+                    if (dbe) {
+                        code = DecodeDBE(code)
+                    }
                     code = srcCode + "\n\n" + code
                     lang = srcBlock.lang
                     title = srcBlock.title
@@ -102,7 +122,8 @@ module.exports = {
                 mBlock.set(key, {
                     lang,
                     title,
-                    code
+                    code,
+                    dbe
                 })
             })
             // console.log('mBlock:', mBlock)
