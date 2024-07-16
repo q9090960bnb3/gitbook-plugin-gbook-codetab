@@ -71,7 +71,7 @@ module.exports = {
             // body = body.replace(/\\\}\\\}/, "\}\}")
             // console.log('mycodetab:', body)
 
-            const reg = /([a-zA-Z]+)[ \t]*(?:"{([_a-zA-Z0-9,:"' \u4e00-\u9fff]+)}")?/
+            const reg = /([a-zA-Z]+)[ \t]*(?:{([_a-zA-Z0-9,:"' \u4e00-\u9fff]+)})?/
 
             const mBlock = new Map()
 
@@ -82,8 +82,12 @@ module.exports = {
             }) => {
                 const res = lang.match(reg)
                 // console.log("res:", res)
+                // console.log('code:', code)
                 lang = res[1].trim() 
                 code = code.trim()
+                if (code === "" || code === undefined) {
+                    return
+                }
                 let title = ''
                 let key = index++
                 let dbe = false
