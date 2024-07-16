@@ -12,8 +12,8 @@ function getAssets() {
 }
 
 function DecodeDBE(content) {
-    content = content.replace(/\\\{\\\{/, "\{\{")
-    content = content.replace(/\\\}\\\}/, "\}\}")
+    content = content.replace(/\\\{\\\{/g, "\{\{")
+    content = content.replace(/\\\}\\\}/g, "\}\}")
     return content
 }
 
@@ -147,6 +147,14 @@ module.exports = {
             result += '</div>';
             // console.log('result:', result)
             return result;
+        },
+        outtab: function(block) {
+            console.log('out:', block)
+            return block.body
+        },
+        intab: function(block) {
+            console.log('in:', block)
+            return block.body
         }
     }
 }
