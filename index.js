@@ -1,8 +1,8 @@
+const escape = require('escape-html');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const codeBlocks = require('gfm-code-blocks');
 const fs = require('fs');
-const hljs = require('highlight.js');
 
 function getAssets() {
     return {
@@ -64,9 +64,15 @@ module.exports = {
         },
     },
     blocks: {
+        /**
+         * 
+         * @param {{body: string}} content 
+         * @returns 
+         */
         codetab: function(content) {
-            // console.log('codetab:', content)
             body = content.body
+            body = body.replace(/\{% raw %\}/g, "")
+            body = body.replace(/\{% endraw %\}/g, "")
             // body = body.replace(/\\\{\\\{/, "\{\{")
             // body = body.replace(/\\\}\\\}/, "\}\}")
             // console.log('mycodetab:', body)
@@ -137,8 +143,7 @@ module.exports = {
             let i = 0
             mBlock.forEach(({lang, code, title}) => {
                 tabsHeader += createTabHeader(title, i, i == 0);
-                const data = hljs.highlight(code,{language: lang}).value
-                tabsContent += createTabBody(i,lang, data);
+                tabsContent += createTabBody(i,lang, escape(code));
                 i++
             })
 
